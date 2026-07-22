@@ -1,5 +1,6 @@
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 import asyncio
+import json
 
 from services.tracker import HandTracker
 
@@ -23,7 +24,9 @@ async def websocket_endpoint(websocket: WebSocket):
 
             if results.hand_landmarks:
                 for hand_landmarks in results.hand_landmarks:
-                    await websocket.send_text(str(hand_landmarks))
+
+                    clean_landmarks = [{"x": lm.x, "y": lm.y, "z": lm.z} for lm in hand_landmarks]
+                    await websocket.send_text(json.dumps(clean_landmarks))
             
             await asyncio.sleep(0.01) # Yield control to the event loop
 
