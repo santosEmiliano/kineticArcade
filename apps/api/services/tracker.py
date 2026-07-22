@@ -1,6 +1,7 @@
 import cv2
 import mediapipe as mp
 import os
+import time
 
 class HandTracker:
     def __init__(self):
@@ -15,7 +16,7 @@ class HandTracker:
 
         self.options = self.HandLandmarkerOptions(
             base_options = self.BaseOptions(model_asset_path = model_path),
-            running_mode = self.VisionRunningMode.IMAGE,
+            running_mode = self.VisionRunningMode.VIDEO,
             num_hands = 2,
             min_hand_detection_confidence = 0.7,
             min_hand_presence_confidence = 0.5,
@@ -34,16 +35,20 @@ class HandTracker:
     def stop_camera(self):
         # Camera deactivation
         self.cap.release()
+        self.landmarker.close()
 
     def process_frame(self):
         # Frame processing and returns landmarks
-        with self.landmarker:
-            ret, frame = self.cap.read()
-            if not ret:
-                raise ValueError("No se pudo leer el frame")
-        
-            frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-            mp_image = mp.Image(image_format = mp.ImageFormat.SRGB, data = frame_rgb)
+        ret, frame = self.cap.read()
+        if not ret:
+            raise ValueError("No se pudo leer el frame")
 
-            results = self.landmarker.detect(mp_image)
-            return results
+        cv2.waitKey(1) 
+        
+        frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        mp_image = mp.Image(image_format = mp.ImageFormat.SRGB, data = frame_rgb)
+
+        timestamp_ms = int(time.time() * 1000)
+        results = self.landmarker.detect_for_video(mp_image, timestamp_ms)
+        
+        return results

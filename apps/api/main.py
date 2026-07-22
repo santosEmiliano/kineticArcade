@@ -18,11 +18,11 @@ async def websocket_endpoint(websocket: WebSocket):
 
     try:
         while True:
-            handLandmarkers = tracker.process_frame()
-            
-            if handLandmarkers is not None:
-                for hand_landmarks in handLandmarkers.hand_landmarks:
-                    print(hand_landmarks, flush=True)
+            results = tracker.process_frame()    
+
+            if results.hand_landmarks:
+                for hand_landmarks in results.hand_landmarks:
+                    await websocket.send_text(str(hand_landmarks))
             
             await asyncio.sleep(0.01)
 
