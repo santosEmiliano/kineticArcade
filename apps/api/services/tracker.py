@@ -1,5 +1,6 @@
 import cv2
 import mediapipe as mp
+import os
 
 class HandTracker:
     def __init__(self):
@@ -9,8 +10,11 @@ class HandTracker:
         self.HandLandmarkerOptions = mp.tasks.vision.HandLandmarkerOptions
         self.VisionRunningMode = mp.tasks.vision.RunningMode
 
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        model_path = os.path.join(current_dir, 'models', 'hand_landmarker.task')
+
         self.options = self.HandLandmarkerOptions(
-            base_options = self.BaseOptions(model_asset_path = 'apps/api/services/hand_landmarker.task'),
+            base_options = self.BaseOptions(model_asset_path = model_path),
             running_mode = self.VisionRunningMode.IMAGE,
             num_hands = 2,
             min_hand_detection_confidence = 0.7,
