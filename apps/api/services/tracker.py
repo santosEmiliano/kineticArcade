@@ -4,7 +4,7 @@ import os
 
 class HandTracker:
     def __init__(self):
-        #Aquí inicializamos MediaPipe cuando se crea la clase
+        # Initial configuration of MediaPipe when HandTracker class is instantiated.
         self.BaseOptions = mp.tasks.BaseOptions
         self.HandLandmarker = mp.tasks.vision.HandLandmarker
         self.HandLandmarkerOptions = mp.tasks.vision.HandLandmarkerOptions
@@ -24,7 +24,7 @@ class HandTracker:
         self.landmarker = self.HandLandmarker.create_from_options(self.options)
 
     def start_camera(self):
-        # Se abre la cámara
+        # Camera activation
         self.cap = cv2.VideoCapture(0)
 
         if not self.cap.isOpened():
@@ -32,11 +32,11 @@ class HandTracker:
             
 
     def stop_camera(self):
-        # Se detiene el uso de la cámara      
+        # Camera deactivation
         self.cap.release()
 
     def process_frame(self):
-        # Se procesa el frame y devuelven los landmarks
+        # Frame processing and returns landmarks
         with self.landmarker:
             ret, frame = self.cap.read()
             if not ret:
