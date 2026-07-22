@@ -1,4 +1,5 @@
 import Header from './components/Header';
+import GameGallery from './components/GameGallery';
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
             Select a classic arcade game to play using real-time hand gesture controls.
           </p>
         </div>
+        <GameGallery />
       </main>
     </div>
   )
