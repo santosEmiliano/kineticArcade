@@ -1,7 +1,22 @@
 import Header from './components/Header';
 import GameGallery from './components/GameGallery';
+import { useEffect } from 'react';
 
 function App() {
+
+  useEffect(() => {
+    const socket = new WebSocket('ws://localhost:8000/ws');
+
+    socket.addEventListener("message", (event: MessageEvent) => {
+      try{
+        const message = JSON.parse(event.data);
+        console.log(message)
+      } catch (error) {
+        console.error("Fallo al parsear las coordenadas de tus manos", error)
+      }
+    })
+  }, [])
+
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 font-sans selection:bg-indigo-500/30">
       <Header />
