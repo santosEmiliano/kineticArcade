@@ -22,6 +22,7 @@ class HandTracker:
             min_hand_presence_confidence = 0.5,
             min_tracking_confidence = 0.5
         )
+        # Instantiate the landmarker once to preserve the computation graph
         self.landmarker = self.HandLandmarker.create_from_options(self.options)
 
     def start_camera(self):
@@ -43,11 +44,13 @@ class HandTracker:
         if not ret:
             raise ValueError("No se pudo leer el frame")
 
+        # Required on macOS to prevent the OpenCV camera buffer from freezing
         cv2.waitKey(1) 
         
         frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         mp_image = mp.Image(image_format = mp.ImageFormat.SRGB, data = frame_rgb)
 
+        # VIDEO mode requires monotonically increasing timestamps
         timestamp_ms = int(time.time() * 1000)
         results = self.landmarker.detect_for_video(mp_image, timestamp_ms)
         
