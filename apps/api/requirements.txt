@@ -1,1 +1,5 @@
-# PENDING
+fastapi
+uvicorn
+opencv-python
+mediapipe
+websockets
