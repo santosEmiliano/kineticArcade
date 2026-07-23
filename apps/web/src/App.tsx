@@ -1,9 +1,10 @@
 import Header from './components/Header';
-import GameGallery from './components/GameGallery';
 import { HandOverlay } from './components/HandOverlay';
 import { VirtualCursor } from './components/VirtualCursor';
+import Home from './pages/Home'
 
 import { useEffect, useState, useRef } from 'react';
+import { Routes, Route } from 'react-router-dom'
 
 function App() {
 
@@ -77,15 +78,11 @@ function App() {
       <VirtualCursor x={hands?.[8]?.x} y={hands?.[8]?.y} isPinching={isPinching} />
       <HandOverlay landmarks={hands} />
       <Header cameraStatus={cameraStatus} setCameraStatus={setCameraStatus}/>
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="mb-10">
-          <h1 className="text-3xl font-bold tracking-tight">Game Library</h1>
-          <p className="mt-2 text-slate-500 dark:text-slate-400 max-w-2xl">
-            Select a classic arcade game to play using real-time hand gesture controls.
-          </p>
-        </div>
-        <GameGallery />
-      </main>
+    
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/game/:gameId" element={<div>Próximamente pantalla de juego</div>} />
+      </Routes>
     </div>
   )
 }
