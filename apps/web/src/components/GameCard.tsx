@@ -1,9 +1,14 @@
+import { useNavigate } from "react-router-dom";
+
 interface GameCardProps {
   title: string;
+  id: string;
   image: string;
 }
 
-export default function GameCard({ title, image }: GameCardProps) {
+export default function GameCard({ title, id, image }: GameCardProps) {
+  const navigate = useNavigate()
+
   return (
     <div className="group flex flex-col rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 overflow-hidden hover:shadow-xl hover:shadow-slate-200/10 dark:hover:shadow-black/50 hover:-translate-y-1 transition-all duration-300">
       
@@ -29,6 +34,7 @@ export default function GameCard({ title, image }: GameCardProps) {
         
         <button 
           className="px-5 py-2.5 bg-slate-900 text-white dark:bg-white dark:text-slate-900 text-sm font-medium rounded-xl hover:bg-slate-800 dark:hover:bg-slate-100 transition-colors shadow-sm active:scale-95"
+          onClick={() => navigate(`/game/${id}`)}
         >
           Play
         </button>
