@@ -2,6 +2,7 @@ import Header from './components/Header';
 import { HandOverlay } from './components/HandOverlay';
 import { VirtualCursor } from './components/VirtualCursor';
 import Home from './pages/Home'
+import GameScreen from './pages/GameScreen'
 
 import { useEffect, useState, useRef } from 'react';
 import { Routes, Route } from 'react-router-dom'
@@ -81,7 +82,7 @@ function App() {
     
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/game/:gameId" element={<div>Próximamente pantalla de juego</div>} />
+        <Route path="/game/:gameId" element={<GameScreen />} />
       </Routes>
     </div>
   )
