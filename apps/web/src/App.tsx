@@ -3,13 +3,16 @@ import GameGallery from './components/GameGallery';
 import { HandOverlay } from './components/HandOverlay';
 import { VirtualCursor } from './components/VirtualCursor';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 function App() {
 
-  const [hands, setHands] = useState(null);
+  const [hands, setHands] = useState<any>(null);
   const [cameraStatus, setCameraStatus] = useState(false);
   const [isPinching, setIsPinching] = useState(false);
+  
+  const scrollStartY = useRef<number | null>(null);
+
 
   const evaluatePinch = (landmarks) => {
     const indexTip = landmarks[8];
@@ -20,6 +23,30 @@ function App() {
 
     setIsPinching(distance < 0.05)
   }
+
+  useEffect(() => {
+    if (!hands) return;
+
+    const isFist = (
+      hands[8].y > hands[6].y &&   
+      hands[12].y > hands[10].y && 
+      hands[16].y > hands[14].y && 
+      hands[20].y > hands[18].y    
+    );
+
+    if (isFist) {
+      if (scrollStartY.current === null) {
+        scrollStartY.current = hands[9].y;
+      } else {
+        const deltaY = hands[9].y - scrollStartY.current;
+        window.scrollBy(0, deltaY * -500);
+        scrollStartY.current = hands[9].y;
+      }
+    } else {
+      scrollStartY.current = null;
+      evaluatePinch(hands);
+    }
+  }, [hands]);
 
   useEffect(() => {
     if (!cameraStatus) return;
@@ -34,7 +61,6 @@ function App() {
       try{
         const message = JSON.parse(event.data);
         setHands(message);
-        evaluatePinch(message);
       } catch (error) {
         console.error("Fallo al parsear las coordenadas de tus manos", error)
       }
