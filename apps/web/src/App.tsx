@@ -1,6 +1,7 @@
 import Header from './components/Header';
 import GameGallery from './components/GameGallery';
 import { HandOverlay } from './components/HandOverlay';
+import { VirtualCursor } from './components/VirtualCursor';
 
 import { useEffect, useState } from 'react';
 
@@ -35,6 +36,7 @@ function App() {
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 font-sans selection:bg-indigo-500/30">
+      <VirtualCursor x={hands?.[8]?.x} y={hands?.[8]?.y} isPinching={false} />
       <HandOverlay landmarks={hands} />
       <Header cameraStatus={cameraStatus} setCameraStatus={setCameraStatus}/>
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
