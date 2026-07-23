@@ -9,6 +9,17 @@ function App() {
 
   const [hands, setHands] = useState(null);
   const [cameraStatus, setCameraStatus] = useState(false);
+  const [isPinching, setIsPinching] = useState(false);
+
+  const evaluatePinch = (landmarks) => {
+    const indexTip = landmarks[8];
+    const thumbTip = landmarks[4];
+    const distance = Math.sqrt(
+      Math.pow(indexTip.x - thumbTip.x, 2) + Math.pow(indexTip.y - thumbTip.y, 2)
+    );
+
+    setIsPinching(distance < 0.05)
+  }
 
   useEffect(() => {
     if (!cameraStatus) return;
@@ -23,6 +34,7 @@ function App() {
       try{
         const message = JSON.parse(event.data);
         setHands(message);
+        evaluatePinch(message);
       } catch (error) {
         console.error("Fallo al parsear las coordenadas de tus manos", error)
       }
@@ -36,7 +48,7 @@ function App() {
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 font-sans selection:bg-indigo-500/30">
-      <VirtualCursor x={hands?.[8]?.x} y={hands?.[8]?.y} isPinching={false} />
+      <VirtualCursor x={hands?.[8]?.x} y={hands?.[8]?.y} isPinching={isPinching} />
       <HandOverlay landmarks={hands} />
       <Header cameraStatus={cameraStatus} setCameraStatus={setCameraStatus}/>
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">

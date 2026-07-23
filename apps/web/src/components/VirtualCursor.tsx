@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 interface VirtualCursorProps {
   x: number; // X coordinate of the cursor
@@ -10,6 +10,15 @@ export const VirtualCursor: React.FC<VirtualCursorProps> = ({ x, y, isPinching }
   // If no valid coordinates, don't render the cursor
   if (typeof x !== 'number' || typeof y !== 'number') return null;
 
+  useEffect(() => {
+    if (isPinching){
+      const pixelX = x * window.innerWidth;
+      const pixelY = y * window.innerHeight;
+      const element = document.elementFromPoint(pixelX, pixelY) as HTMLElement;
+      if(element) element.click();
+    }
+  }, [isPinching])
+  
   return (
     <div
       className="fixed pointer-events-none z-[9999] transition-transform duration-75"
